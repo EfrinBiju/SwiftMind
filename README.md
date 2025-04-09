@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftMind.x</title>
+</head>
+<body>
+    <h1> SwiftMind </h1>
+
+    <!-- Input field and button to fetch Wikipedia summary -->
+    <label for="topicInput">Enter a topic: </label>
+    <input type="text" id="topicInput" placeholder="eg,YouTube">
+    <button onclick="fetchAndDisplaySummary()">Enter</button>
+
+    <!-- Display loading message and the fetched summary -->
+    <p id="loadingMessage" style="color:black; display: none;">Plz wait...</p>
+    <div id="summary"></div>
+
+    <script>
+        // Function to fetch summary from Wikipedia API
+        function fetchWikipediaSummary(query) {
+            const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+
+            // Use the fetch API to get data
+            return fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch data from Wikipedia");
+                    }
+                    return response.json();  // Parse the JSON response
+                })
+                .then(data => data.extract)  // Extract the summary from the API response
+                .catch(error => {
+                    console.error("Error:", error);
+                    return "Error fetching Wikipedia summary.";
+                });
+        }
+
+        // Function to handle the fetch operation when the user clicks the button
+        function fetchAndDisplaySummary() {
+            const query = document.getElementById("topicInput").value;
+
+            if (!query) {
+                document.getElementById("summary").innerText = "Type here.";
+                return;
+            }
+
+            // Show loading message
+            document.getElementById("loadingMessage").style.display = "block";
+            document.getElementById("summary").innerText = "";  // Clear previous summary
+
+            // Fetch Wikipedia summary
+            ChaBot.X(query)
+                .then(summary => {
+                    // Hide loading message and display the summary
+                    document.getElementById("waiting....").style.display = "none";
+                    document.getElementById("summary").innerText = summary;
+                });
+        }
+    </script>
+</body>
+</html>
+Thank you so much for coming here !!! 
